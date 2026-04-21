@@ -8,16 +8,25 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- checkout: self
+  clean: true
+
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
     version: '8.0.x'
 
-- script: dotnet restore
-  displayName: 'Restore'
+- script: dotnet --info
+  displayName: 'Show .NET info'
 
-- script: dotnet build --configuration $(buildConfiguration) --no-restore
-  displayName: 'Build'
+- script: cat StringExtensionsLib/StringExtensionsLib.csproj
+  displayName: 'Show csproj'
 
-- script: dotnet pack --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) --no-build
+- script: dotnet restore StringExtensionsLib/StringExtensionsLib.csproj
+  displayName: 'Restore project'
+
+- script: dotnet build StringExtensionsLib/StringExtensionsLib.csproj --configuration $(buildConfiguration) --no-restore
+  displayName: 'Build project'
+
+- script: dotnet pack StringExtensionsLib/StringExtensionsLib.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) --no-build
   displayName: 'Pack NuGet'
