@@ -37,6 +37,6 @@ steps:
 - script: |
     ls $(Build.ArtifactStagingDirectory)
     dotnet nuget push "$(Build.ArtifactStagingDirectory)"/*.nupkg \
-      --source "https://pkgs.dev.azure.com/YOUR_ORG/YOUR_PROJECT/_packaging/lab4-feed/nuget/v3/index.json" \
+      --source "https://pkgs.dev.azure.com/edhimal0404/Lab4-DevOps/_packaging/lab4-feed/nuget/v3/index.json" />
       --skip-duplicate
   displayName: 'Push to Artifacts'
