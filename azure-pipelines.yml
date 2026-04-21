@@ -31,10 +31,12 @@ steps:
 - script: dotnet pack StringExtensionsLib/StringExtensionsLib.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) --no-build
   displayName: 'Pack NuGet'
   
-- task: NuGetCommand@2
+- task: NuGetAuthenticate@1
+  displayName: 'Authenticate to Azure Artifacts'
+
+- script: |
+    ls $(Build.ArtifactStagingDirectory)
+    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg \
+      --source "https://pkgs.dev.azure.com/edhimal0404/Lab4-DevOps/_packaging/lab4-feed/nuget/v3/index.json" \
+      --api-key az
   displayName: 'Push to Artifacts'
-  inputs:
-    command: 'push'
-    publishVstsFeed: 'lab4-feed'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    allowPackageConflicts: true
